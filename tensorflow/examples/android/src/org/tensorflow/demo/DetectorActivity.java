@@ -44,8 +44,8 @@ import org.tensorflow.demo.OverlayView.DrawCallback;
 import org.tensorflow.demo.env.BorderedText;
 import org.tensorflow.demo.env.ImageUtils;
 import org.tensorflow.demo.env.Logger;
+import org.tensorflow.demo.model.RecognizedSign;
 import org.tensorflow.demo.tracking.MultiBoxTracker;
-import org.tensorflow.demo.R;
 
 /**
  * An activity that uses a TensorFlowMultiBoxDetector and ObjectTracker to detect and then track
@@ -180,8 +180,8 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                             final String[] statLines = statString.split("\n");
                             Collections.addAll(lines, statLines);
                         }
-                        lines.add("");
 
+                        lines.add("");
                         lines.add("Frame: " + previewWidth + "x" + previewHeight);
                         lines.add("Crop: " + copy.getWidth() + "x" + copy.getHeight());
                         lines.add("View: " + canvas.getWidth() + "x" + canvas.getHeight());
@@ -252,10 +252,6 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
         final Canvas canvas = new Canvas(croppedBitmap);
         canvas.drawBitmap(rgbFrameBitmap, frameToCropTransform, null);
 
-        // For examining the actual TF input.
-        if (SAVE_PREVIEW_BITMAP)
-            ImageUtils.saveBitmap(croppedBitmap);
-
         if (luminance == null)
             luminance = new byte[yuvBytes[0].length];
 
@@ -277,19 +273,31 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                         paint.setStyle(Style.STROKE);
                         paint.setStrokeWidth(2.0f);
 
-                        final List<Classifier.Recognition> mappedRecognitions =
-                                new LinkedList<>();
+                        final List<Classifier.Recognition> mappedRecognitions = new LinkedList<>();
+                        final List<RecognizedSign> recognizedSigns = new LinkedList<>();
+                        final long timestamp = System.currentTimeMillis();
 
-                        for (final Classifier.Recognition result : results) {
-                            final RectF location = result.getLocation();
-                            if (location != null && result.getConfidence() >= MINIMUM_CONFIDENCE_TF_OD_API) {
-                                canvas.drawRect(location, paint);
+                        for (final Classifier.Recognition res : results) {
+                            final RectF location = res.getLocation();
+                            if (location == null || res.getConfidence() < MINIMUM_CONFIDENCE_TF_OD_API)
+                                continue;
 
-                                cropToFrameTransform.mapRect(location);
-                                result.setLocation(location);
-                                mappedRecognitions.add(result);
-                            }
+                            canvas.drawRect(location, paint);
+
+                            cropToFrameTransform.mapRect(location);
+                            res.setLocation(location);
+                            mappedRecognitions.add(res);
+
+
+                            // Saving recognized sign info
+                            RecognizedSign recognizedSign = new RecognizedSign(location);
+                            recognizedSign.setRecognition(res.getId(), res.getConfidence());
+                            recognizedSign.setTimestamp(timestamp);
+                            recognizedSigns.add(recognizedSign);
                         }
+
+                        if(recognizedSigns.size() > 0)
+                            saveImageAndPredictions(timestamp, recognizedSigns, croppedBitmap);
 
                         tracker.trackResults(mappedRecognitions, luminance, currTimestamp);
                         trackingOverlay.postInvalidate();
@@ -302,8 +310,22 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
         Trace.endSection();
     }
 
-    protected void processImageRGBbytes(int[] rgbBytes) {
+    private void saveImageAndPredictions(final long timestamp,
+                                         final List<RecognizedSign> recognizedSigns,
+                                         final Bitmap croppedBitmap) {
+        runInBackground(new Runnable() {
+            @Override
+            public void run() {
+                ImageUtils.saveBitmap(croppedBitmap, timestamp + ".png");
+
+                //FIXME
+                //    Save recognizedSigns in firebase
+
+            }
+        });
     }
+
+    protected void processImageRGBbytes(int[] rgbBytes) { }
 
     @Override
     protected int getLayoutId() {

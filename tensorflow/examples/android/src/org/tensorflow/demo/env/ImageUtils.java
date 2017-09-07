@@ -72,15 +72,14 @@ public class ImageUtils {
     LOGGER.i("Saving %dx%d bitmap to %s.", bitmap.getWidth(), bitmap.getHeight(), root);
     final File myDir = new File(root);
 
-    if (!myDir.mkdirs()) {
+    if (!myDir.mkdirs())
       LOGGER.i("Make dir failed");
-    }
 
     final String fname = filename;
     final File file = new File(myDir, fname);
-    if (file.exists()) {
+    if (file.exists())
       file.delete();
-    }
+
     try {
       final FileOutputStream out = new FileOutputStream(file);
       bitmap.compress(Bitmap.CompressFormat.PNG, 99, out);
