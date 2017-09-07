@@ -48,7 +48,7 @@ public class TensorFlowObjectDetectionAPIModel implements Classifier {
     private int inputSize;
 
     // Pre-allocated buffers.
-    private Vector<String> labels = new Vector<String>();
+    private Vector<String> labels = new Vector<>();
     private int[] intValues;
     private byte[] byteValues;
     private float[] outputLocations, outputScores, outputClasses, outputNumDetections;

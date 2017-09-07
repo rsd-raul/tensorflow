@@ -42,7 +42,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="org.tensorflow.demo.DetectorActivity"
+        <activity android:name="org.tensorflow.demo.views.DetectorActivity"
                   android:screenOrientation="portrait"
                   android:label="@string/activity_name_detection">
             <intent-filter>
