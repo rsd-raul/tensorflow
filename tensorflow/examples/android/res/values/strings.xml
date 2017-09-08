@@ -19,4 +19,15 @@
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
     <string name="problems_try_again">A problem occurred, try again.</string>
     <string name="connected_firebase">CONNECTED to FIREBASE</string>
+    <string name="login_firebase">Login into Firebase</string>
+    <string name="no_network">No internet connection</string>
+    <string name="no_network_desc">Ups, it seems like you don\\\'t have Internet right now and we need that to log in. Check your connection and try again.</string>
+    <string name="retry">Retry</string>
+    <string name="cancel">Cancel</string>
+    <string name="logged_out">Successful logout</string>
+    <string name="logged_out_desc">You have successfully logged out. Hit cancel if it was by mistake.</string>
+    <string name="ok">Ok</string>
+    <string name="close_app">Close app</string>
+    <string name="logout">Logout</string>
+    <string name="login">Login</string>
 </resources>

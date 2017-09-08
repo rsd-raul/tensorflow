@@ -144,6 +144,9 @@ dependencies {
     // Google Play Services - Google - https://developers.google.com/android/guides/setup
     compile "com.google.android.gms:play-services-location:$FIREBASE_GSM"
     compile "com.google.android.gms:play-services-auth:$FIREBASE_GSM"
+
+    // MaterialDialogs - Aidan Follestad - https://github.com/afollestad/material-dialogs
+    compile 'com.afollestad.material-dialogs:commons:0.9.4.5'
 }
 
 apply plugin: 'com.google.gms.google-services'

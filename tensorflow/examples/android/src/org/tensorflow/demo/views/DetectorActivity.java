@@ -47,6 +47,8 @@ import org.tensorflow.demo.TensorFlowObjectDetectionAPIModel;
 import org.tensorflow.demo.env.BorderedText;
 import org.tensorflow.demo.env.ImageUtils;
 import org.tensorflow.demo.env.Logger;
+import org.tensorflow.demo.managers.AuthManager;
+import org.tensorflow.demo.managers.FirebaseManager;
 import org.tensorflow.demo.model.RecognizedSign;
 import org.tensorflow.demo.tracking.MultiBoxTracker;
 
@@ -145,7 +147,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
         frameToCropTransform.invert(cropToFrameTransform);
         yuvBytes = new byte[3][];
 
-        trackingOverlay = (OverlayView) findViewById(R.id.tracking_overlay);
+        trackingOverlay = findViewById(R.id.tracking_overlay);
         trackingOverlay.addCallback(
                 new OverlayView.DrawCallback() {
                     @Override
@@ -292,11 +294,13 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                             res.setLocation(location);
                             mappedRecognitions.add(res);
 
+                            // Only store the recognized signs if we have a firebase connection
+                            if(AuthManager.getUserId() == null)
+                                continue;
 
                             // Saving recognized sign info
                             RecognizedSign recognizedSign = new RecognizedSign(location);
-                            recognizedSign.setRecognition(res.getId(), res.getConfidence());
-                            recognizedSign.setTimestamp(timestamp);
+                            recognizedSign.setRecognition(res.getTitle(), res.getConfidence());
                             recognizedSigns.add(recognizedSign);
                         }
 
@@ -321,10 +325,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
             @Override
             public void run() {
                 ImageUtils.saveBitmap(croppedBitmap, timestamp + ".png");
-
-                //FIXME
-                //    Save recognizedSigns in firebase
-
+                FirebaseManager.saveRecognizedSigns(timestamp, recognizedSigns);
             }
         });
     }

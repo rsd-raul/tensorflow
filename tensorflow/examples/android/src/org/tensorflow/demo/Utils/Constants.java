@@ -1,4 +1,4 @@
-package org.tensorflow.demo.Utils;
+package org.tensorflow.demo.utils;
 
 
 public abstract class Constants {

@@ -9,9 +9,8 @@ public class RecognizedSign {
     private float centerY;
     private float height;
     private float width;
-    private String index;
+    private String detected;
     private Float confidence;
-    private long timestamp;
 
     public RecognizedSign(RectF location) {
         centerX = location.centerX();
@@ -20,8 +19,8 @@ public class RecognizedSign {
         width = location.width();
     }
 
-    public void setRecognition(String index, Float confidence) {
-        this.index = index;
+    public void setRecognition(String detected, Float confidence) {
+        this.detected = detected;
         this.confidence = confidence;
     }
 
@@ -41,19 +40,11 @@ public class RecognizedSign {
         return width;
     }
 
-    public String getIndex() {
-        return index;
+    public String getDetected() {
+        return detected;
     }
 
     public Float getConfidence() {
         return confidence;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
     }
 }
