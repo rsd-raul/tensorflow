@@ -30,4 +30,5 @@
     <string name="close_app">Close app</string>
     <string name="logout">Logout</string>
     <string name="login">Login</string>
+    <string name="camera">Camera</string>
 </resources>

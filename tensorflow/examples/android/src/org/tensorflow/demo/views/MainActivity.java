@@ -1,19 +1,14 @@
 package org.tensorflow.demo.views;
 
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-
 import org.tensorflow.demo.R;
 import org.tensorflow.demo.utils.Constants;
 import org.tensorflow.demo.utils.DialogUtils;
@@ -36,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         logInOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mAuthManager.isLoggedFirebase()) {
+                if(AuthManager.isLoggedFirebase()) {
                     mAuthManager.signOut();
                     logInOut.setText(R.string.login);
                 } else
@@ -59,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
 
         Toast.makeText(this, R.string.login_firebase, Toast.LENGTH_SHORT).show();
         mAuthManager.loginFirebase(this);
+    }
+
+    public void startCamera(View view){
+        startActivity(new Intent(this, DetectorActivity.class));
     }
 
     /**

@@ -59,7 +59,7 @@ import org.tensorflow.demo.tracking.MultiBoxTracker;
 public class DetectorActivity extends CameraActivity implements OnImageAvailableListener {
     private static final Logger LOGGER = new Logger();
 
-    private static final int TF_OD_API_INPUT_SIZE = 300;
+    private static final int TF_OD_API_INPUT_SIZE = 600;
     private static final String TF_OD_API_MODEL_FILE = "file:///android_asset/frozen_inference_graph.pb";
     private static final String TF_OD_API_LABELS_FILE = "file:///android_asset/labels_list.txt";
 
@@ -269,7 +269,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                         final long startTime = SystemClock.uptimeMillis();
 
                         final Bitmap recognizedBitmap = croppedBitmap;
-                        final List<Classifier.Recognition> results = detector.recognizeImage(croppedBitmap);
+                        final List<Classifier.Recognition> results = detector.recognizeImage(recognizedBitmap);
                         lastProcessingTimeMs = SystemClock.uptimeMillis() - startTime;
 
                         cropCopyBitmap = Bitmap.createBitmap(croppedBitmap);
@@ -295,7 +295,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                             mappedRecognitions.add(res);
 
                             // Only store the recognized signs if we have a firebase connection
-                            if(AuthManager.getUserId() == null)
+                            if(!AuthManager.isLoggedFirebase())
                                 continue;
 
                             // Saving recognized sign info

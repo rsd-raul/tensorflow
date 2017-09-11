@@ -110,7 +110,7 @@ public class AuthManager implements OnCompleteListener<AuthResult>,
         DialogUtils.logoutDialog(mActivity);
     }
 
-    public boolean isLoggedFirebase() {
+    public static boolean isLoggedFirebase() {
         return sUser != null;
     }
 
